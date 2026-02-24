@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.SystemLogMapper">
+    <resultMap id="SystemLogResultMapper" type="com.zijin.oep.model.SystemLog">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="date" property="date"/>
+        <result column="ipaddr" property="ipaddr"/>
+        <result column="descr" property="descr"/>
+        <result column="courseid" property="courseid"/>
+    </resultMap>
+    <resultMap id="SystemLogResultMapper1" type="com.zijin.oep.model.SystemLogEx">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="date" property="date"/>
+        <result column="ipaddr" property="ipaddr"/>
+        <result column="descr" property="descr"/>
+        <result column="courseid" property="courseid"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <select id="selectAllSystemLog" resultMap="SystemLogResultMapper1">
+        SELECT tb_systemLog.*,tb_user.name
+        FROM tb_systemlog
+                 JOIN tb_user ON tb_systemlog.userid = tb_user.id;
+    </select>
+    <select id="selectSystemLogByUserIdAndCourId" resultMap="SystemLogResultMapper1">
+        SELECT tb_systemLog.*,tb_user.name
+        FROM tb_systemlog
+                 JOIN tb_user ON tb_systemlog.userid = tb_user.id
+        WHERE tb_systemlog.userid=#{teacherId} AND tb_systemlog.courseid = #{courseId};
+    </select>
+</mapper>

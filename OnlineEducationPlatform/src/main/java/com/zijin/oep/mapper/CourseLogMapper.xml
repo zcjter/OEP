@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.CourseLogMapper">
+    <resultMap id="CourseLogMapperrResult" type="com.zijin.oep.model.CourseLog">
+        <id column="id" property="id"/>
+        <result column="classid" property="classid"/>
+        <result column="userid" property="userid"/>
+        <result column="date" property="date"/>
+        <result column="ipaddr" property="ipaddr"/>
+        <result column="descr" property="descr"/>
+    </resultMap>
+    <select id="countCourseContent" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_courselog
+        WHERE classid = #{classId}
+          AND descr LIKE '%查看课程%';
+    </select>
+    <select id="getLogStatistics" resultType="java.util.Map">
+        SELECT DATE_FORMAT(date, '%m-%d') AS formatted, COUNT(*) AS countCharpter
+        FROM tb_courselog
+        WHERE DATE_FORMAT(date,'%Y') = #{year} AND DATE_FORMAT(date,'%m') = #{month} AND classid = #{classId} AND descr LIKE '%查看课程%'
+        GROUP BY DATE_FORMAT(date, '%m-%d')
+        ORDER BY formatted ASC;
+    </select>
+    <select id="getLogStatisticsByStudent" resultType="java.util.Map">
+        SELECT COUNT(*) AS countStudentLog, DATE_FORMAT(date, '%m-%d') AS formatted
+        FROM tb_courselog
+        WHERE DATE_FORMAT(date,'%Y') = #{year} AND DATE_FORMAT(date,'%m') = #{month} AND userid = #{userId}
+        GROUP BY DATE_FORMAT(date, '%m-%d')
+        ORDER BY formatted ASC;
+    </select>
+</mapper>

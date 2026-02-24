@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+custom:
+  upload:
+    dir: uploads/
+spring:
+  servlet:
+    multipart:
+      max-file-size:10MB
+      max-request-size:10MB
+  application:
+    name: content-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/oepdb?serverTimezone=UTC&userUnicode=true&useSSL=false
+    username: root
+    password: 123456
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    com.zijin.oep: debug
+    org.springframework: warn
+
+

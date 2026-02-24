@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.ExamPaperMapper">
+    <resultMap id="ExamPaperResultMap" type="com.zijin.oep.model.ExamPaper">
+        <id column="id"  property="id"/>
+        <result column="name" property="name"></result>
+        <result column="score" property="score"></result>
+        <result column="count" property="count"></result>
+        <result column="level" property="level"></result>
+        <result column="courseid" property="courseid"></result>
+        <result column="creator" property="creator"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="type" property="type"></result>
+        <result column="folderid" property="folderid"></result>
+        <result column="sealflag" property="sealflag"></result>
+        <result column="password" property="password"></result>
+    </resultMap>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM tb_exampaper;
+    </select>
+    <select id="selectAllByFolderId" resultMap="ExamPaperResultMap">
+        SELECT * FROM tb_exampaper WHERE courseid = #{courseId} AND folderid = #{parentId};
+    </select>
+    <update id="sealExamPaper">
+        UPDATE tb_exampaper
+        SET sealflag=1,password=#{password}
+        WHERE id=#{examPaperId};
+    </update>
+    <update id="unsealExamPaper">
+        UPDATE tb_exampaper
+        SET sealflag=0
+        WHERE id=#{examPaperId};
+    </update>
+</mapper>

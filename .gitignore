@@ -1,0 +1,21 @@
+# Java backend
+target/
+*.class
+*.jar
+*.war
+*.log
+.idea/
+*.iml
+
+# Node frontend  
+OnlineEducationPlatform-web/node_modules/
+OnlineEducationPlatform-web/dist/
+OnlineEducationPlatform-web/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+uploads/
+logs/

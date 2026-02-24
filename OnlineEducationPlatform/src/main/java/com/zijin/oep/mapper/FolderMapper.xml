@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.FolderMapper">
+    <resultMap id="FolderResultMap" type="com.zijin.oep.model.Folder">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pid" property="pid"/>
+        <result column="courseid" property="courseid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="foldertype" property="foldertype"/>
+        <result column="dirty" property="dirty"/>
+    </resultMap>
+
+    <resultMap id="FolderEXResultMap" type="com.zijin.oep.model.FolderEx">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pid" property="pid"/>
+        <result column="courseid" property="courseid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="foldertype" property="foldertype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="count" property="count"/>
+        <result column="selcount" property="selcount"/>
+    </resultMap>
+
+    <select id="selectAllByParentIdAndCourseId" resultMap="FolderResultMap">
+        SELECT * from tb_folder WHERE courseid=#{courseId} AND pid=#{parentId} AND dirty=0;
+    </select>
+
+    <select id="selectAllByCourseId" resultMap="FolderResultMap">
+        SELECT * FROM tb_folder WHERE courseid=#{courseId} AND dirty=0 AND foldertype=0;
+    </select>
+    <select id="selectAllByCourseIdExam" resultMap="FolderResultMap">
+        SELECT * FROM tb_folder WHERE courseid=#{courseId} AND dirty=0 AND foldertype=2;
+    </select>
+    <select id="selectAllByCourseIdTask" resultMap="FolderResultMap">
+        SELECT * FROM tb_folder WHERE courseid=#{courseId} AND dirty=0 AND foldertype=1;
+    </select>
+    <select id="selectAllByParentId" resultMap="FolderResultMap">
+        SELECT  * FROM tb_folder WHERE  pid=#{parentId};
+    </select>
+    <select id="getFolderName" resultMap="FolderResultMap">
+        SELECT * FROM tb_folder WHERE name LIKE CONCAT('%', #{searchText}, '%') AND courseid =#{courseId} AND dirty=0 ;
+    </select>
+    <select id="selectAllByQuestionType" resultMap="FolderEXResultMap">
+        SELECT tb_folder.*, COUNT(tb_question.id) AS count
+        FROM tb_folder
+            LEFT JOIN tb_question ON tb_folder.id = tb_question.folderid
+        WHERE tb_question.questiontype = #{type} AND tb_question.courseid = #{courseId}
+        GROUP BY tb_folder.id;
+    </select>
+    <update id="updateNameById">
+        UPDATE tb_folder  SET name=#{name}   WHERE id=#{id};
+    </update>
+
+    <update id="updateDirtyByIdOrParentId">
+        UPDATE tb_folder  SET dirty = #{dirty}  WHERE id = #{folderId} OR pid = #{folderId};
+    </update>
+
+    <update id="moveToFolder">
+        UPDATE tb_folder SET pid =#{folderId} WHERE id =#{id};
+    </update>
+</mapper>

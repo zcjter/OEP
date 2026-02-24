@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.TaskQuestionMapper">
+    <resultMap id="TaskQuestionResultMap" type="com.zijin.oep.model.TaskQuestion">
+        <id column="id" property="id"/>
+        <result column="taskid" property="taskid"/>
+        <result column="questionid" property="questionid"/>
+        <result column="score" property="score"/>
+    </resultMap>
+</mapper>

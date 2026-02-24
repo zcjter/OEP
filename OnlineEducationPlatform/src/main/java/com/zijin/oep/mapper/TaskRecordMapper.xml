@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.TaskRecordMapper">
+    <resultMap id="TaskRecordResultMap" type="com.zijin.oep.model.TaskRecord">
+        <id column="id"  property="id"/>
+        <result column="sid" property="sid"></result>
+        <result column="sname" property="sname"></result>
+        <result column="taskid" property="taskid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="score" property="score"></result>
+        <result column="ipaddress" property="ipaddress"></result>
+        <result column="reviewer" property="reviewer"></result>
+        <result column="reviewtime" property="reviewtime"></result>
+        <result column="status" property="status"></result>
+        <result column="classid" property="classid"></result>
+    </resultMap>
+    <select id="selectBySidAndTaskId" resultMap="TaskRecordResultMap">
+        SELECT * FROM tb_taskrecord WHERE sid=#{studentId} AND taskid=#{taskId};
+    </select>
+    <update id="updateStatusAndStatus">
+        UPDATE tb_taskrecord
+        SET status='待批阅' ,
+            endtime=#{endTime}
+        WHERE sid=#{studentId} AND taskid = #{taskId};
+    </update>
+   <select id="selectByTaskIdAndClassId" resultMap="TaskRecordResultMap">
+       SELECT * FROM tb_taskrecord WHERE taskid=#{taskId} AND classid=#{classId} AND (status='待批阅' OR status='完成');
+   </select>
+
+    <select id="countTaskStatus" resultType="java.util.Map">
+        SELECT
+            SUM(CASE WHEN status = '未交' OR status = '待批阅' OR status = '完成' THEN 1 ELSE 0 END) AS unpaid,
+            SUM(CASE WHEN status = '待批阅' THEN 1 ELSE 0 END) AS reviewed,
+            SUM(CASE WHEN status = '完成' or status='待批阅' THEN 1 ELSE 0 END) AS complete
+        FROM
+            tb_taskrecord
+        WHERE
+            taskid = #{taskId}
+          AND classid = #{classId}
+    </select>
+    <update id="updateReviewRecord">
+        UPDATE tb_taskrecord tr
+            JOIN (
+            SELECT taskid, sid,SUM(score) AS total_score
+            FROM tb_taskanswerrecord
+            WHERE taskid = #{taskId} AND sid = #{studentId}
+            GROUP BY taskid
+            ) AS subquery ON tr.taskid = subquery.taskid AND tr.sid = subquery.sid
+            SET tr.score = subquery.total_score,
+                tr.reviewer = #{reviewer},
+                tr.reviewtime = #{reviewTime},
+                tr.status='完成'
+        WHERE tr.taskid = #{taskId} AND tr.sid = #{studentId};
+    </update>
+    <select id="selectStudentNotInTask" resultMap="TaskRecordResultMap">
+        SELECT * FROM tb_taskrecord
+        WHERE status='未交' AND classid=#{classId} AND taskid=#{taskId};
+    </select>
+</mapper>

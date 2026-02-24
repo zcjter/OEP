@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="com.zijin.oep.model.User">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="state" property="state" />
+        <result column="type" property="type" />
+        <result column="sid" property="sid" />
+        <result column="pid" property="pid" />
+    </resultMap>
+
+    <resultMap id="UserResultMap1" type="com.zijin.oep.model.UserEx">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="state" property="state" />
+        <result column="type" property="type" />
+        <result column="sid" property="sid" />
+        <result column="pid" property="pid" />
+        <result column="deptname" property="deptname" />
+    </resultMap>
+    <resultMap id="UserResultMap2" type="com.zijin.oep.model.UserEx1">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="state" property="state" />
+        <result column="type" property="type" />
+        <result column="sid" property="sid" />
+        <result column="pid" property="pid" />
+        <result column="dname" property="dname" />
+        <result column="sname" property="sname"/>
+    </resultMap>
+    <select id="selectStudent" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE id NOT IN (
+            SELECT sid
+            FROM tb_studentclass
+            WHERE classid = #{classId} OR classid IN (
+                SELECT id
+                FROM tb_class
+                WHERE cid = #{courseId}
+            )
+        ) AND tb_user.type=0;
+    </select>
+
+    <select id="selectStudentByDepartment" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE id NOT IN (
+            SELECT sid
+            FROM tb_studentclass
+            WHERE classid = #{classId} OR classid IN (
+                SELECT id
+                FROM tb_class
+                WHERE cid = #{courseId}
+            )
+        )AND tb_user.pid=#{pid} AND tb_user.type=0;
+    </select>
+    <select id="getStudentNotInCourseByNameOrNO" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE id NOT IN (
+            SELECT sid
+            FROM tb_studentclass
+            WHERE classid = #{classId} OR classid IN (
+                SELECT id
+                FROM tb_class
+                WHERE cid = #{courseId}
+            )
+        )AND tb_user.type = 0
+        AND (tb_user.name LIKE CONCAT('%', #{searchText}, '%') OR tb_user.id LIKE CONCAT('%', #{searchText}, '%'));
+    </select>
+    <select id="selectStudentByClass" resultMap="UserResultMap1">
+        SELECT tb_user.*,tb_department.name AS deptname
+        FROM tb_user
+            JOIN tb_studentclass ON tb_user.id = tb_studentclass.sid
+            JOIN tb_department ON tb_user.pid = tb_department.id
+        WHERE tb_studentclass.classid = #{classId} ;
+    </select>
+
+    <select id="getStudentByNameOrNo" resultMap="UserResultMap1">
+        SELECT tb_user.*,tb_department.name AS deptname
+        FROM tb_user
+                 JOIN tb_studentclass ON tb_user.id = tb_studentclass.sid
+                 JOIN tb_department ON tb_user.pid = tb_department.id
+        WHERE (tb_user.name LIKE CONCAT('%', #{searchText}, '%') OR tb_user.id LIKE CONCAT('%', #{searchText}, '%'))
+        AND tb_studentclass.classid = #{classId};
+    </select>
+
+    <select id="selectTeacher" resultMap="UserResultMap">
+        SELECT *
+        FROM  tb_user
+        WHERE  id NOT IN(SELECT tid FROM tb_teachercourse WHERE courseid =#{courseId})
+        AND tb_user.type=1;
+    </select>
+
+
+    <select id="selectTeacherByCourse" resultMap="UserResultMap">
+        SELECT tb_user.*
+        FROM tb_user
+            JOIN tb_teachercourse ON tb_user.id = tb_teachercourse.tid
+        WHERE tb_teachercourse.courseid = #{courseId};
+    </select>
+
+    <select id="getTeacherNotInCourseByNameOrNO" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE id NOT IN (SELECT tid FROM tb_teachercourse WHERE courseid = #{courseId})
+        AND tb_user.type = 1
+        AND (tb_user.name LIKE CONCAT('%', #{searchText}, '%') OR tb_user.id LIKE CONCAT('%', #{searchText}, '%'));
+    </select>
+
+    <select id="selectTeacherByDepartment" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE  id NOT IN(SELECT tid FROM tb_teachercourse WHERE courseid =#{courseId})
+        AND tb_user.pid=#{pid} AND tb_user.type=1;
+    </select>
+    <select id="selectStudentInClass" resultMap="UserResultMap">
+        SELECT *
+        FROM tb_user
+        WHERE id  IN (SELECT sid FROM tb_studentclass WHERE classid = #{classId})
+        AND tb_user.type=0;
+    </select>
+    <select id="selectStudentByType" resultMap="UserResultMap2">
+        SELECT tb_user.*,tb_school.name AS sname,tb_department.name AS dname
+        FROM tb_user
+                 JOIN tb_school ON tb_school.id = tb_user.sid
+                 JOIN tb_department ON tb_department.id=tb_user.pid
+        WHERE tb_user.type=0;
+    </select>
+    <select id="selectTeacherByType" resultMap="UserResultMap2">
+        SELECT tb_user.*,tb_school.name AS sname,tb_department.name AS dname
+        FROM tb_user
+                 JOIN tb_school ON tb_school.id = tb_user.sid
+                 JOIN tb_department ON tb_department.id=tb_user.pid
+        WHERE tb_user.type=1;
+    </select>
+    <update id="disabledUser">
+        UPDATE tb_user
+        SET state=0
+        WHERE id=#{userId}
+    </update>
+    <update id="enableUser">
+        UPDATE tb_user
+        SET state=1
+        WHERE id=#{userId}
+    </update>
+ </mapper>

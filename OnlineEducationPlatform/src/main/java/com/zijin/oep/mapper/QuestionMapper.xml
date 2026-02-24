@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.QuestionMapper">
+    <resultMap id="QuestionResultMap" type="com.zijin.oep.model.Question">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap1" type="com.zijin.oep.model.QuestionEx">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+        <result column="score" property="score"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap2" type="com.zijin.oep.model.ExamQuestionType">
+        <result column="questiontype" property="questiontype"/>
+        <result column="count" property="count"/>
+        <result column="score" property="score"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap3" type="com.zijin.oep.model.QuestionEx1">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+        <result column="score" property="score"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap4" type="com.zijin.oep.model.QuestionEx2">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+        <result column="score" property="score"/>
+        <result column="num" property="num"/>
+        <result column="sanswer" property="sanswer"/>
+        <result column="sscore" property="sscore"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap5" type="com.zijin.oep.model.QuestionEx3">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+        <result column="score" property="score"/>
+    </resultMap>
+    <resultMap id="QuestionResultMap6" type="com.zijin.oep.model.QuestionEx4">
+        <id column="id" property="id"/>
+        <result column="level" property="level"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="option1" property="option1"/>
+        <result column="option2" property="option2"/>
+        <result column="option3" property="option3"/>
+        <result column="option4" property="option4"/>
+        <result column="folderid" property="folderid"/>
+        <result column="createtime" property="createtime"/>
+        <result column="creator" property="creator"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="dirty" property="dirty"/>
+        <result column="courseid" property="courseid"/>
+        <result column="score" property="score"/>
+        <result column="sanswer" property="sanswer"/>
+        <result column="sscore" property="sscore"/>
+    </resultMap>
+    <insert id="insertQuestion">
+        INSERT INTO tb_question  (type, level, content, answer,folderid, createtime, creator, questiontype, dirty, courseid )  VALUES
+        (#{type},#{level},#{content},#{answer},#{folderid},#{createtime},#{creator},#{questiontype},#{dirty},#{courseid});
+    </insert>
+    <select id="selectAllByFolderId" resultMap="QuestionResultMap">
+        SELECT * FROM tb_question WHERE folderid = #{folderId} AND courseid = #{courseId} AND dirty = 0 ;
+    </select>
+
+    <select id="selectAllByQuestionType" resultMap="QuestionResultMap">
+        SELECT *
+        FROM tb_question
+        WHERE questiontype = #{questionType} AND dirty = 0 AND courseid = #{courseId};
+    </select>
+    <select id="selectAllByQuestionLevel" resultMap="QuestionResultMap">
+        SELECT *
+        FROM tb_question
+        WHERE level=#{questionLevel} AND dirty = 0 AND courseid = #{courseId};
+    </select>
+    <select id="getQuestionContent" resultMap="QuestionResultMap">
+        SELECT * FROM tb_question WHERE content LIKE CONCAT('%', #{searchText}, '%') AND courseid =#{courseId} AND dirty=0 ;
+    </select>
+    <select id="selectCountByQuestionType" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tb_question WHERE questiontype = #{questionType} AND courseid = #{courseId};
+    </select>
+    <select id="selectRandomQuestionsByQuestionType" resultMap="QuestionResultMap">
+        SELECT * FROM tb_question
+        WHERE questiontype = #{questionType} AND courseid = #{courseId}
+        ORDER BY RAND() LIMIT #{count}
+    </select>
+    <select id="selectRandomQuestionsByFolderId" resultMap="QuestionResultMap">
+        SELECT * FROM tb_question
+        WHERE questiontype = #{questionType} AND courseid = #{courseId} AND folderid=#{folderId}
+        ORDER BY RAND() LIMIT #{count}
+    </select>
+    <select id="selectAllQuestion" resultMap="QuestionResultMap1">
+        SELECT q.*, eq.score
+        FROM tb_question q
+                 JOIN (
+            SELECT *
+            FROM tb_paperquestion
+            WHERE paperid = #{examPaperId} AND num = #{number}
+        ) AS eq ON q.id = eq.questionid
+        ORDER BY q.questiontype;
+    </select>
+    <select id="countAllByQuestionType" resultMap="QuestionResultMap2">
+        SELECT q.questiontype, COUNT(*) AS count,eq.score
+        FROM tb_question q
+                 JOIN (
+            SELECT *
+            FROM tb_paperquestion
+            WHERE paperid = #{examPaperId} AND num = #{number}
+        ) AS eq ON q.id = eq.questionid
+        GROUP BY q.questiontype,eq.score
+        ORDER BY q.questiontype;
+    </select>
+
+    <select id="selectRandomNumByPaperId" resultType="int">
+        <!-- 随机选择一个 num 值并将其保存到变量中 -->
+        SELECT num
+        FROM (
+        SELECT DISTINCT num
+        FROM tb_paperquestion
+        WHERE paperid = #{paperId}
+        ) AS subquery
+        ORDER BY RAND()
+        LIMIT 1
+    </select>
+    <select id="selectQuestionsByRandomNum"  resultMap="QuestionResultMap3">
+        <!-- 使用前一个查询中保存的变量来过滤结果 -->
+        SELECT tb_paperquestion.score,tb_paperquestion.num ,tb_question.*
+        FROM tb_paperquestion
+        JOIN tb_question ON tb_paperquestion.questionid = tb_question.id
+        WHERE tb_paperquestion.paperid = #{paperId}
+        AND tb_paperquestion.num = #{num}
+    </select>
+    <select id="selectQuestionByTaskId" resultMap="QuestionResultMap5">
+        SELECT tb_taskquestion.score,tb_question.*
+        FROM tb_taskquestion
+        JOIN tb_question ON tb_taskquestion.questionid = tb_question.id
+        WHERE tb_taskquestion.taskid = #{taskId};
+    </select>
+    <update id="updateDirtyByFolderId">
+        UPDATE tb_question  SET dirty = #{dirty}  WHERE folderid = #{folderid};
+    </update>
+
+    <update id="updateDirtyById">
+        UPDATE tb_question  SET dirty = #{dirty}  WHERE id = #{questionId}
+    </update>
+
+    <update id="moveQuestionToFolder">
+        UPDATE tb_question SET folderid=#{folderId} WHERE id=#{id}
+    </update>
+
+    <update id="updateQuestionContentById">
+        UPDATE tb_question
+        SET
+            option1 = #{option1},
+            option2 = #{option2},
+            option3 = #{option3},
+            option4 = #{option4},
+            content = #{stemContent},
+            answer = #{answerContent}
+        WHERE
+            id = #{questionId}
+
+    </update>
+    <select id="selectByStudentIdAndQuestionId" resultMap="QuestionResultMap4">
+        SELECT
+            tb_paperquestion.score,
+            tb_paperquestion.num,
+            tb_question.*,
+            tb_answerrecord.answer AS sanswer,
+            tb_answerrecord.score AS  sscore
+        FROM
+            tb_paperquestion
+                JOIN
+            tb_question ON tb_paperquestion.questionid = tb_question.id
+                JOIN
+            tb_answerrecord ON tb_answerrecord.paperid = tb_paperquestion.paperid
+                AND tb_answerrecord.questionid = tb_question.id
+        WHERE
+            tb_paperquestion.paperid =#{paperId}
+          AND tb_paperquestion.num = #{number}
+          AND tb_answerrecord.sid = #{studentId}
+    </select>
+    <select id="getMaxId" resultType="Integer">
+        SELECT MAX(id) FROM tb_question
+    </select>
+    <select id="selectByTaskIdAndStudentId" resultMap="QuestionResultMap6">
+        SELECT tb_taskquestion.score,tb_taskanswerrecord.answer AS sanswer,tb_taskanswerrecord.score AS sscore,tb_question.*
+        FROM tb_taskquestion
+                 JOIN tb_question ON tb_taskquestion.questionid = tb_question.id
+                 JOIN tb_taskanswerrecord ON tb_taskanswerrecord.questionid=tb_question.id
+        WHERE tb_taskquestion.taskid = #{taskId} AND tb_taskanswerrecord.sid=#{studentId};
+    </select>
+</mapper>

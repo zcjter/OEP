@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.CourseMapper">
+    <resultMap id="CourseResultMap" type="com.zijin.oep.model.Course">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="uid" property="uid"/>
+        <result column="sid" property="sid"/>
+        <result column="pid" property="pid"/>
+        <result column="descr" property="descr"/>
+        <result column="cover" property="cover"/>
+
+    </resultMap>
+    <resultMap id="CourseResultMap1" type="com.zijin.oep.model.CourseEx">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="uid" property="uid"/>
+        <result column="sid" property="sid"/>
+        <result column="pid" property="pid"/>
+        <result column="descr" property="descr"/>
+        <result column="cover" property="cover"/>
+        <result column="teacherName" property="teacherName"/>
+        <result column="classId" property="classId"/>
+    </resultMap>
+    <resultMap id="CourseResultMap2" type="com.zijin.oep.model.CourseEx1">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="uid" property="uid"/>
+        <result column="sid" property="sid"/>
+        <result column="pid" property="pid"/>
+        <result column="descr" property="descr"/>
+        <result column="cover" property="cover"/>
+        <result column="sname" property="sname"/>
+        <result column="dname" property="dname"/>
+        <result column="uname" property="uname"/>
+    </resultMap>
+    <insert id="insertCourse">
+        INSERT INTO tb_course (name,uid,sid,pid,descr,cover)
+        VALUES (#{name},#{uid},#{sid},#{pid},#{descr},#{cover});
+    </insert>
+    <select id="selectByUId" resultMap="CourseResultMap" parameterType="string">
+        select * from tb_course  where uid=#{uid}
+    </select>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM tb_course;
+    </select>
+
+    <select id="selectParticipateCourse" resultMap="CourseResultMap">
+        SELECT tb_course.*
+        FROM tb_course
+            INNER JOIN tb_teachercourse ON tb_course.id = tb_teachercourse.courseid
+        WHERE tb_teachercourse.tid = #{uid}
+        AND tb_teachercourse.role = 1;
+    </select>
+
+    <select id="selectTeacherCourse" resultMap="CourseResultMap1">
+        SELECT tb_course.*,tb_user.name AS teacherName,tb_studentclass.classid AS classId
+        FROM tb_studentclass
+                 INNER JOIN tb_class ON tb_studentclass.classid = tb_class.id
+                 INNER JOIN tb_course ON tb_class.cid = tb_course.id
+                 INNER JOIN tb_user ON tb_user.id = tb_course.uid
+        WHERE tb_studentclass.sid = #{studentId}
+    </select>
+    <select id="selectAlCourse" resultMap="CourseResultMap2">
+        SELECT
+            tb_course.*,
+            tb_school.name AS sname,
+            tb_department.name AS dname,
+            tb_user.name AS uname
+        FROM tb_course
+                JOIN tb_user ON tb_user.id = tb_course.uid
+                JOIN tb_school ON tb_school.id = tb_course.sid
+                JOIN tb_department ON tb_department.id = tb_course.pid
+                JOIN tb_teachercourse ON tb_teachercourse.tid = tb_course.uid
+        WHERE tb_teachercourse.role = 0;
+    </select>
+</mapper>

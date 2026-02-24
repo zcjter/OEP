@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.CourseClassMapper">
+    <resultMap id="ClassMapperResult" type="com.zijin.oep.model.CourseClass">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="cid" property="cid"/>
+    </resultMap>
+
+    <select id="selectClass" resultMap="ClassMapperResult">
+        select * from tb_class where cid=#{cid}
+    </select>
+
+    <update id="rename">
+        UPDATE tb_class
+        SET name = #{name}
+        WHERE id = #{id};
+    </update>
+    <select id="selectCourseClass" resultMap="ClassMapperResult">
+        SELECT tb_class.*
+        FROM tb_studentclass
+                 JOIN tb_class ON tb_studentclass.classid = tb_class.id
+        WHERE tb_studentclass.sid = #{studentId} AND tb_class.cid = #{courseId};
+    </select>
+</mapper>

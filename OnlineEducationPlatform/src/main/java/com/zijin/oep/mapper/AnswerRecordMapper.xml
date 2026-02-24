@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.AnswerRecordMapper">
+    <resultMap id="AnswerRecordResultMap" type="com.zijin.oep.model.AnswerRecord">
+        <id column="id" property="id"/>
+        <result column="sid" property="sid"/>
+        <result column="paperid" property="paperid"/>
+        <result column="questionid" property="questionid"/>
+        <result column="questiontype" property="questiontype"/>
+        <result column="answer" property="answer"/>
+        <result column="score" property="score"/>
+    </resultMap>
+    <update id="automaticScoring">
+        UPDATE tb_answerrecord AS ar
+            JOIN tb_question AS q ON ar.questionid = q.id
+            JOIN tb_paperquestion AS pq ON q.id = pq.questionid
+            SET ar.score = pq.score
+        WHERE ar.answer = q.answer AND ar.questiontype = #{questionType}
+            AND ar.paperid = pq.paperid AND ar.sid=#{studentId};
+    </update>
+    <update id="reviewSubjectiveQuestions">
+            UPDATE  tb_answerrecord
+            SET score = #{score}
+            WHERE  questionid=#{questionId} AND sid=#{studentId} AND paperid=#{paperId} ;
+    </update>
+</mapper>

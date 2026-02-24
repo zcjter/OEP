@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.ContentMapper">
+    <resultMap id="ContentResultMap" type="com.zijin.oep.model.Content">
+        <id column="id" property="id"/>
+        <result column="cid" property="cid"/>
+        <result column="courseid" property="courseid"/>
+        <result column="content" property="content" />
+    </resultMap>
+
+    <select id="getOneContent" resultMap="ContentResultMap">
+        SELECT * FROM tb_content
+        WHERE courseid = #{courseId} AND cid = #{chapterId};
+    </select>
+
+    <update id="updateContent">
+        UPDATE tb_content
+        SET content=#{content}
+        WHERE cid=#{chapterId}
+    </update>
+
+    <delete id="deleteContent">
+        DELETE FROM tb_content WHERE cid=#{chapterId};
+    </delete>
+</mapper>

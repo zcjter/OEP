@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.ExamRecordMapper">
+    <resultMap id="ExamRecordResultMap" type="com.zijin.oep.model.ExamRecord">
+        <id column="id"  property="id"/>
+        <result column="sid" property="sid"></result>
+        <result column="sname" property="sname"></result>
+        <result column="paperid" property="paperid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="score" property="score"></result>
+        <result column="accuracy" property="accuracy"></result>
+        <result column="ipaddress" property="ipaddress"></result>
+        <result column="reviewer" property="reviewer"></result>
+        <result column="reviewtime" property="reviewtime"></result>
+        <result column="status" property="status"></result>
+        <result column="count" property="count"></result>
+        <result column="classid" property="classid"></result>
+    </resultMap>
+    <resultMap id="ExamRecordResultMap1" type="com.zijin.oep.model.ExamRecordEx">
+
+        <id column="id"  property="id"/>
+        <result column="sid" property="sid"></result>
+        <result column="sname" property="sname"></result>
+        <result column="paperid" property="paperid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="score" property="score"></result>
+        <result column="accuracy" property="accuracy"></result>
+        <result column="ipaddress" property="ipaddress"></result>
+        <result column="reviewer" property="reviewer"></result>
+        <result column="reviewtime" property="reviewtime"></result>
+        <result column="status" property="status"></result>
+        <result column="count" property="count"></result>
+        <result column="classid" property="classid"></result>
+        <result column="total" property="total"></result>
+    </resultMap>
+    <update id="updateExamRecord">
+        UPDATE tb_examrecord er
+            JOIN (
+            SELECT paperid, sid,SUM(score) AS total_score
+            FROM tb_answerrecord
+            WHERE paperid = #{paperId} AND sid = #{studentId}
+            GROUP BY paperid
+            ) AS subquery ON er.paperid = subquery.paperid AND er.sid = subquery.sid
+            SET er.score = subquery.total_score,
+                er.endtime = #{endTime},
+                er.status = '已完成',
+                er.accuracy = #{objectiveaccuracy}
+            WHERE er.paperid = #{paperId} AND er.sid = #{studentId};
+    </update>
+    <select id="selectByPaperIdAndStuId" resultMap="ExamRecordResultMap">
+        SELECT * FROM tb_examrecord WHERE paperid=#{paperId} AND sid=#{studentId};
+    </select>
+    <!--统计某位学生客观题分数-->
+    <select id="CountObjectQuestionByStudentId" resultType="java.lang.Integer">
+        SELECT
+            SUM(score) AS total_score
+        FROM tb_answerrecord
+        WHERE
+          sid = #{studentId}
+          AND paperid = #{paperId}
+          AND questiontype IN (0, 1, 2);
+    </select>
+    <select id="selectExamPaperByExamId" resultMap="ExamRecordResultMap">
+        SELECT * FROM tb_examrecord WHERE  paperid=#{paperId} AND classid=#{classId};
+    </select>
+    <update id="updateReviewRecord">
+        UPDATE tb_examrecord er
+            JOIN (
+            SELECT paperid, sid,SUM(score) AS total_score
+            FROM tb_answerrecord
+            WHERE paperid = #{paperId} AND sid = #{studentId}
+            GROUP BY paperid
+            ) AS subquery ON er.paperid = subquery.paperid AND er.sid = subquery.sid
+            SET er.score = subquery.total_score,
+                er.reviewer = #{reviewer},
+                er.reviewtime = #{reviewTime}
+        WHERE er.paperid = #{paperId} AND er.sid = #{studentId};
+    </update>
+    <select id="selectScoreByClassId" resultMap="ExamRecordResultMap">
+        SELECT *
+        FROM tb_examrecord
+        WHERE  classid = #{classsId}
+    </select>
+</mapper>

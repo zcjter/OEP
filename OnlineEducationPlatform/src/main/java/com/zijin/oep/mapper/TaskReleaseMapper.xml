@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.TaskReleaseMapper">
+    <resultMap id="TaskReleaseResultMap" type="com.zijin.oep.model.TaskRelease">
+        <id column="id"  property="id"/>
+        <result column="taskid" property="taskid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+    </resultMap>
+    <resultMap id="TaskReleaseResultMap1" type="com.zijin.oep.model.TaskReleaseEx">
+        <id column="id"  property="id"/>
+        <result column="taskid" property="taskid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+        <result column="name" property="name"></result>
+    </resultMap>
+    <resultMap id="TaskReleaseResultMap2" type="com.zijin.oep.model.TaskReleaseEx1">
+        <id column="id"  property="id"/>
+        <result column="taskid" property="taskid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+        <result column="name" property="name"></result>
+        <result column="score" property="score"></result>
+    </resultMap>
+    <select id="selectByClassId" resultMap="TaskReleaseResultMap1">
+        SELECT tb_task.name,tb_taskrelease.*
+        FROM tb_taskrelease
+        JOIN tb_task ON tb_task.id=tb_taskrelease.taskid
+        WHERE classid=#{classId}
+    </select>
+    <select id="selectTaskByClassId" resultMap="TaskReleaseResultMap2">
+        SELECT tb_taskrelease.*,tb_task.name,tb_task.score
+        FROM tb_taskrelease
+            JOIN tb_task  ON tb_taskrelease.taskid = tb_task.id
+        WHERE tb_taskrelease.classid = #{classId};
+    </select>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.TaskMapper">
+    <resultMap id="TaskResultMap" type="com.zijin.oep.model.Task">
+        <id column="id"  property="id"/>
+        <result column="name" property="name"></result>
+        <result column="score" property="score"></result>
+        <result column="count" property="count"></result>
+        <result column="courseid" property="courseid"></result>
+        <result column="creator" property="creator"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="type" property="type"></result>
+        <result column="folderid" property="folderid"></result>
+    </resultMap>
+    <select id="getMaxId" resultType="Integer">
+        SELECT MAX(id) FROM tb_task
+    </select>
+    <select id="selectByCourseId" resultMap="TaskResultMap">
+        SELECT * FROM tb_task WHERE courseid=#{courseId} AND folderid=#{parentId};
+    </select>
+</mapper>

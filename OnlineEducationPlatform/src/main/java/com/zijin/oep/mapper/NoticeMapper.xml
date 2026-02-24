@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.NoticeMapper">
+    <resultMap id="NoticeResultMap" type="com.zijin.oep.model.Notice">
+        <id column="id" property="id"/>
+        <result column="sender" property="sender"/>
+        <result column="senderid" property="senderid"/>
+        <result column="receiverid" property="receiverid"/>
+        <result column="receiver" property="receiver"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="releasetime" property="releasetime"/>
+        <result column="classid" property="classid"/>
+        <result column="classname" property="classname"/>
+        <result column="courseid" property="courseid"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+    </resultMap>
+    <select id="selectByCourseIdAndUserId" resultMap="NoticeResultMap">
+        SELECT * FROM tb_notice WHERE courseid=#{courseId} AND senderid=#{userId};
+    </select>
+    <delete id="deleteNotice">
+        DELETE  FROM tb_notice WHERE id=#{noticeId}
+    </delete>
+    <select id="selectAllReceiverId" resultMap="NoticeResultMap">
+        SELECT * FROM tb_notice WHERE receiverid = #{userId};
+    </select>
+    <select id="selectAllByClassId" resultMap="NoticeResultMap">
+        SELECT DISTINCT tn.*
+        FROM tb_studentclass tsc
+                 INNER JOIN tb_notice tn ON tsc.classid = tn.classid
+        WHERE tsc.sid = #{userId};
+
+    </select>
+</mapper>

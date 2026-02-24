@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zijin.oep.mapper.PaperQuestionMapper">
+    <resultMap id="PaperQuestionResultMap" type="com.zijin.oep.model.PaperQuestion">
+        <id column="id" property="id"/>
+        <result column="paperid" property="paperid"/>
+        <result column="questionid" property="questionid"/>
+        <result column="score" property="score"/>
+        <result column="num" property="num"/>
+    </resultMap>
+
+    <delete id="deletePaperQuestionByPaperId">
+        DELETE FROM tb_paperquestion WHERE paperid=#{paperId};
+    </delete>
+    <!--获取某份试卷客观题(单选，多选，判断)的总分-->
+    <select id="CountObjectQuestion" resultType="java.lang.Integer">
+        SELECT
+            SUM(pq.score) AS total_score
+        FROM
+            tb_question q
+            JOIN tb_paperquestion pq ON q.id = pq.questionid
+        WHERE
+            pq.num = 1
+          AND pq.paperid = #{paperId}
+          AND q.questiontype IN (0, 1, 2);
+    </select>
+</mapper>

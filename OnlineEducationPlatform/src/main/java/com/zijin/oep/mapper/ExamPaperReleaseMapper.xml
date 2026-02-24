@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zijin.oep.mapper.ExamPaperReleaseMapper">
+    <resultMap id="ExamPaperReleaseResultMap" type="com.zijin.oep.model.ExamPaperRelease">
+        <id column="id"  property="id"/>
+        <result column="paperid" property="paperid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+    </resultMap>
+    <resultMap id="ExamPaperReleaseResultMap1" type="com.zijin.oep.model.ExamPaperReleaseEx">
+        <id column="id"  property="id"/>
+        <result column="paperid" property="paperid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+        <result column="name" property="name"></result>
+        <result column="score" property="score"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+    <resultMap id="ExamPaperReleaseResultMap2" type="com.zijin.oep.model.ExamPaperReleaseEx1">
+        <result column="paperid" property="paperid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="classid" property="classid"></result>
+        <result column="name" property="name"></result>
+        <result column="count" property="count"></result>
+    </resultMap>
+    <select id="selectExamPaperByClassId" resultMap="ExamPaperReleaseResultMap1">
+        SELECT
+            paper.name,
+            paper.score,
+            status.*
+        FROM
+            tb_exampaperrelease AS status
+                JOIN
+            tb_exampaper AS paper ON status.paperid = paper.id
+        WHERE status.classid = #{classId};
+    </select>
+    <select id="selectAllByClassId" resultMap="ExamPaperReleaseResultMap2">
+        SELECT r.*,p.name,p.count
+        FROM tb_exampaperrelease AS r
+                 INNER JOIN tb_exampaper AS p ON r.paperid = p.id
+        WHERE r.classid = #{classId};
+    </select>
+</mapper>
