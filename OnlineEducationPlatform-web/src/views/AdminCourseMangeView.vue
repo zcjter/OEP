@@ -40,25 +40,33 @@ export default {
 </template>
 
 <style scoped>
-.header {
-  background-color: #409EFF;
-  color: #FFFFFF;
+#admin-dashboard {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
+  flex-direction: column;
+  height: 100vh;
 }
+
+.header {
+  background-color: transparent;
+  padding: 0;
+}
+
 .sidebar {
-  width: 200px;
+  width: 220px;
 }
-.main{
+
+.main {
+  flex: 1;
+  padding: 20px;
+  background: #f5f7fa;
   min-width: 1000px;
-  min-height: 1000px;
+  min-height: calc(100vh - 140px);
 }
+
 .footer {
-  background-color: #F0F2F5;
-  padding: 10px;
+  background-color: #ffffff;
+  padding: 16px;
   text-align: center;
-  margin-top: 100px
+  border-top: 1px solid #e4e7ed;
 }
 </style>

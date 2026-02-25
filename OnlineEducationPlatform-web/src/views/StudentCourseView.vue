@@ -1,22 +1,20 @@
 <!--学生端课程首页-->
 <template>
-  <div class="teacher-dashboard">
+  <div class="student-dashboard">
     <!-- 头部 -->
     <el-header class="header">
       <StudentHeader></StudentHeader>
     </el-header>
-    <div class="main-and-sidebar">
+    
+    <div class="main-container">
       <el-aside class="sidebar">
         <StudentAside></StudentAside>
       </el-aside>
 
-      <el-main class="main">
+      <el-main class="main-content">
         <StudentCourseList></StudentCourseList>
       </el-main>
     </div>
-
-    <!-- 中间部分 -->
-
 
     <!-- 尾部 -->
     <el-footer class="footer">
@@ -30,7 +28,6 @@ import StudentCourseList from '../components/StudentCourseList.vue'
 import StudentHeader from "../components/StudentHeader.vue";
 import StudentAside from "../components/StudentAside.vue";
 import Footer from "../components/Footer.vue";
-import Inbox from "../components/Inbox.vue";
 
 export default {
   name: "StudentDashboard",
@@ -48,43 +45,39 @@ export default {
 </script>
 
 <style scoped>
-.teacher-dashboard {
+.student-dashboard {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
 .header {
-  background-color: #409EFF;
-  color: #FFFFFF;
+  background-color: transparent;
+  padding: 0;
+}
+
+.main-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  margin-bottom: 0;
+  flex: 1;
 }
 
 .sidebar {
-  width: 200px;
-  margin-bottom: 0; /* 调整侧边栏底部间距为0 */
+  width: 220px;
 }
 
-
-.main {
+.main-content {
   flex: 1;
-  padding: 0 20px; /* 调整中间部分左右padding为20px */
-  margin-top: 10px; /* 调整顶部间距为0 */
+  padding: 24px;
+  background: #f5f7fa;
   min-width: 1000px;
-  min-height: 1000px;
+  min-height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 
 .footer {
-  background-color: #F0F2F5;
-  padding: 10px;
+  background-color: #ffffff;
+  padding: 16px;
   text-align: center;
-}
-.main-and-sidebar {
-  display: flex;
-  flex: 1; /* 使用Flexbox布局，并将其拉伸以占据剩余的空间 */
+  border-top: 1px solid #e4e7ed;
 }
 </style>
